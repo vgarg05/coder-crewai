@@ -135,15 +135,10 @@ def _generate_terminal_image(prompt_cmd: str, raw_output: str, img_path: Path):
     except ImportError:
         return
 
-    # Process and line-wrap output lines so nothing gets cut off
     raw_lines = raw_output.splitlines() if raw_output else ["(No output produced)"]
-    formatted_lines = []
-    
-    # Add prompt line
-    formatted_lines.append((prompt_cmd, "prompt"))
+    formatted_lines = [(prompt_cmd, "prompt")]
 
     for line in raw_lines:
-        # Wrap lines longer than 85 chars
         wrapped = textwrap.wrap(line, width=85) if len(line) > 85 else [line]
         for w in wrapped:
             if "Error" in w or "Traceback" in w or "Exception" in w:
@@ -154,24 +149,18 @@ def _generate_terminal_image(prompt_cmd: str, raw_output: str, img_path: Path):
                 tag = "text"
             formatted_lines.append((w, tag))
 
-    # 2x Supersampling for razor-sharp, large readable text in Word
-    scale = 2
-    font_size = 20 * scale
-    line_height = 30 * scale
-    padding = 24 * scale
+    font_size = 14
+    line_height = 22
+    padding = 18
 
-    # Auto-detect best bold monospace font on Windows / Linux OS
+    # Native Windows Consolas font
     font_candidates = [
-        "C:\\Windows\\Fonts\\consolab.ttf",
         "C:\\Windows\\Fonts\\consola.ttf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
-        "/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf",
-        "/usr/share/fonts/truetype/ubuntu/UbuntuMono-B.ttf",
-        "DejaVuSansMono-Bold.ttf",
-        "consolab.ttf"
+        "C:\\Windows\\Fonts\\consolab.ttf",
+        "consola.ttf",
+        "arial.ttf"
     ]
-    
+
     font = None
     for fc in font_candidates:
         try:
@@ -179,37 +168,32 @@ def _generate_terminal_image(prompt_cmd: str, raw_output: str, img_path: Path):
             break
         except Exception:
             continue
-            
+
     if font is None:
         font = ImageFont.load_default()
 
-    # Calculate high-res width and height tightly bounded around text
-    max_line_len = max((len(text) for text, _ in formatted_lines), default=35)
-    img_width = min(900 * scale, max(450 * scale, max_line_len * 13 * scale + padding * 2))
+    max_line_len = max((len(text) for text, _ in formatted_lines), default=40)
+    img_width = max(800, max_line_len * 9 + padding * 2)
     img_height = len(formatted_lines) * line_height + padding * 2
 
-    # Create dark background image (#1e1e1e)
     img = Image.new("RGB", (img_width, img_height), color=(30, 30, 30))
     draw = ImageDraw.Draw(img)
 
-    # Render lines directly from top padding (No header bar, No RGB dots)
     y = padding
     for text, tag in formatted_lines:
         if tag == "prompt":
-            color = (229, 192, 123)  # Gold / Yellow
+            color = (229, 192, 123)  # Yellow / Gold
         elif tag == "error":
-            color = (244, 71, 71)    # Bright Red
+            color = (224, 108, 117)  # Red
         elif tag == "data":
-            color = (97, 175, 239)   # Bright Cyan/Blue
+            color = (97, 175, 239)   # Cyan / Blue
         else:
-            color = (220, 220, 220)  # Crisp White/Light Grey
-            
+            color = (220, 220, 220)  # Light Grey / White
+
         draw.text((padding, y), text, font=font, fill=color)
         y += line_height
 
-    # Downscale smoothly to 1x with LANCZOS for anti-aliased crisp text
-    final_img = img.resize((img_width // scale, img_height // scale), Image.Resampling.LANCZOS)
-    final_img.save(img_path, dpi=(300, 300))
+    img.save(img_path)
 
 
 def _generate_word_document(filename: str, prompt_cmd: str, full_output: str, output_dir: Path):
