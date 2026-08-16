@@ -154,27 +154,22 @@ def _generate_terminal_image(prompt_cmd: str, raw_output: str, img_path: Path):
                 tag = "text"
             formatted_lines.append((w, tag))
 
-    # 2x Supersampling for razor-sharp rendering in Word
+    # 2x Supersampling for razor-sharp, large readable text in Word
     scale = 2
-    font_size = 15 * scale
-    line_height = 24 * scale
-    padding = 20 * scale
-    header_height = 36 * scale
+    font_size = 20 * scale
+    line_height = 30 * scale
+    padding = 24 * scale
 
-    # Auto-detect best monospace font on Windows / OS
+    # Auto-detect best bold monospace font on Windows / Linux OS
     font_candidates = [
-        "C:\\Windows\\Fonts\\consola.ttf",
         "C:\\Windows\\Fonts\\consolab.ttf",
-        "C:\\Windows\\Fonts\\arial.ttf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+        "C:\\Windows\\Fonts\\consola.ttf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf",
-        "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf",
-        "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
-        "/usr/share/fonts/truetype/ubuntu/UbuntuMono-R.ttf",
-        "DejaVuSansMono.ttf",
-        "LiberationMono-Regular.ttf",
-        "consola.ttf",
-        "arial.ttf"
+        "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf",
+        "/usr/share/fonts/truetype/ubuntu/UbuntuMono-B.ttf",
+        "DejaVuSansMono-Bold.ttf",
+        "consolab.ttf"
     ]
     
     font = None
@@ -188,9 +183,9 @@ def _generate_terminal_image(prompt_cmd: str, raw_output: str, img_path: Path):
     if font is None:
         font = ImageFont.load_default()
 
-    # Calculate high-res width and height
-    max_line_len = max((len(text) for text, _ in formatted_lines), default=45)
-    img_width = max(900 * scale, max_line_len * 10 * scale + padding * 2)
+    # Calculate high-res width and height tightly bounded around text
+    max_line_len = max((len(text) for text, _ in formatted_lines), default=35)
+    img_width = min(900 * scale, max(450 * scale, max_line_len * 13 * scale + padding * 2))
     img_height = len(formatted_lines) * line_height + padding * 2
 
     # Create dark background image (#1e1e1e)
