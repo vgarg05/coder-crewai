@@ -165,8 +165,14 @@ def _generate_terminal_image(prompt_cmd: str, raw_output: str, img_path: Path):
     font_candidates = [
         "C:\\Windows\\Fonts\\consola.ttf",
         "C:\\Windows\\Fonts\\consolab.ttf",
-        "C:\\Windows\\Fonts\\lucon.ttf",
         "C:\\Windows\\Fonts\\arial.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf",
+        "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
+        "/usr/share/fonts/truetype/ubuntu/UbuntuMono-R.ttf",
+        "DejaVuSansMono.ttf",
+        "LiberationMono-Regular.ttf",
         "consola.ttf",
         "arial.ttf"
     ]
