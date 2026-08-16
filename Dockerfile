@@ -21,5 +21,6 @@ RUN pip install --no-cache-dir \
     tensorflow \
     torch torchvision --extra-index-url https://download.pytorch.org/whl/cpu \
     gymnasium gym \
+    nltk spacy transformers opencv-python-headless \
     python-docx \
     pillow
