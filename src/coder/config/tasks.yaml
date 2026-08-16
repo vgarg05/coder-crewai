@@ -1,0 +1,12 @@
+coding_task:
+  description: >
+    Use your sandbox tools to achieve this: {assignment}
+    First, write a text file 'theory.txt' in the sandbox directory containing a clear 2-3 paragraph theoretical background of the algorithm/topic.
+    Then write and run python code to solve the assignment.
+  expected_output: >
+    A comprehensive summary of what you did to achieve the assignment and the final result.
+    In your markdown response, you MUST include the embedded image links for the execution results:
+    - Terminal output screenshot: ![Terminal Output](terminal_output.png)
+    - Generated plot/visualization (if applicable): ![Generated Plot](plot.png)
+  agent: coder
+  output_file: output/solution.md

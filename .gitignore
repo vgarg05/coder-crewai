@@ -1,0 +1,31 @@
+# Environment & secret files
+.env
+*.env
+.venv/
+venv/
+env/
+
+# Python cache & build files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Generated outputs & logs (keep folder structure)
+output/*.docx
+output/*.png
+output/*.log
+output/*.txt
+sandbox/
+!.gitkeep
+sandbox_tool_explnation.py
