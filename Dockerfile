@@ -20,5 +20,6 @@ RUN pip install --no-cache-dir \
     seaborn \
     tensorflow \
     torch torchvision --extra-index-url https://download.pytorch.org/whl/cpu \
+    gymnasium gym \
     python-docx \
     pillow
