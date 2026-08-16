@@ -19,5 +19,6 @@ RUN pip install --no-cache-dir \
     matplotlib \
     seaborn \
     tensorflow \
+    torch torchvision --extra-index-url https://download.pytorch.org/whl/cpu \
     python-docx \
     pillow
