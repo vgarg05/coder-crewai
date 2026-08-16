@@ -268,12 +268,14 @@ def _generate_word_document(filename: str, prompt_cmd: str, full_output: str, ou
     add_body_text("Python 3.11, Docker Environment, CrewAI Agent Framework.")
 
     add_section_heading("Code")
-    # Source Code Block -> Times New Roman, 14pt, Regular, Left (Preserves Indentation)
-    for line in code_content.splitlines():
-        p_line = doc.add_paragraph()
-        p_line.alignment = WD_ALIGN_PARAGRAPH.LEFT
-        r = p_line.add_run(line if line else " ")
-        format_run(r, font_name="Times New Roman", size_pt=14, bold=False)
+    # Source Code Block -> Times New Roman, 14pt, Regular, Left (Preserves Indentation & zero line gaps)
+    code_p = doc.add_paragraph()
+    code_p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    code_p.paragraph_format.space_before = Pt(0)
+    code_p.paragraph_format.space_after = Pt(0)
+    code_p.paragraph_format.line_spacing = 1.0
+    r_code = code_p.add_run(code_content)
+    format_run(r_code, font_name="Times New Roman", size_pt=14, bold=False)
 
     add_section_heading("Output")
     add_body_text("Terminal Output Screenshot:")
